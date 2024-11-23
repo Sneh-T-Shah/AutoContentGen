@@ -1,20 +1,16 @@
 import os
 import google.generativeai as genai
 
-# Configure the API key outside the class (assuming it's set elsewhere)
-os.environ['GEMINI_API_KEY'] = 'YOUR_API_KEY'
-api_key = os.getenv('GEMINI_API_KEY')
-genai.configure(api_key=api_key)
-
 class ContentCreate:
-  def __init__(self, topic):
+  def __init__(self, topic, api_key):
     self.topic = topic
-    self.model = genai.GenerativeModel("gemini-pro")
+    self.model = genai.GenerativeModel("gemini-1.5-flash")
+    genai.configure(api_key=api_key)
     self.prompt = self.make_prompt()
     
 
   def make_prompt(self):
-    prompt = self.model.generate_content(contents=f'Return me just A PROMPT TO GENERATE AN ARTICLE BASED ON GIVEN SERIES OF ARTICLES ON THE TOPIC {self.topic}. Note:: Here articles are extracted through web scraping and does not have images or charts. Note do not give me articles just give me a prompt to generate an article based on the given series of articles.')
+    prompt = self.model.generate_content(contents=f'Return me just A PROMPT TO GENERATE AN Single compiled ARTICLE BASED ON GIVEN SERIES OF ARTICLES ON THE TOPIC {self.topic}. Note:: Here articles are extracted through web scraping and does not have images or charts. Note do not give me articles just give me a prompt to generate an article based on the given series of articles.')
     return prompt.text
 
   def generate_article(self, article,source):

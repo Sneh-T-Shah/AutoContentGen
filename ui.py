@@ -22,13 +22,17 @@ if 'custom_prompt' not in st.session_state:
     st.session_state.custom_prompt = False
 
 topic = st.text_input("Enter the topic you want to generate content on")
+api_key = st.text_input("Enter the gemini API key for the content generation API")
 websites = st.slider("Select the number of articles to be generated", 1, 30, 1)
 submit = st.button("Submit")
 
 if submit and topic == "":
     st.write("Please enter a topic to generate content on")
 
-if submit and topic != "":
+if submit and api_key == "" or len(api_key) != 39:
+    st.write("Please enter a valid API key")
+    
+if submit and topic != "" and api_key != "" and len(api_key) == 39:
     content = {"source": [], "content": []}
     i = 1
     st.write(f"Scraping articles for the topic... {topic}")
@@ -58,7 +62,9 @@ if submit and topic != "":
         st.write("No articles found for the topic or unable to scrape articles")
 
     if content["content"]:
-        content_create = ContentCreate(topic)
+        content_create = ContentCreate(topic, api_key)
+        base_prompt = content_create.prompt
+        st.session_state.base_prompt = base_prompt
         st.write("Generating content for the articles....")
         content["content"] = content["content"][:websites]
         content["source"] = content["source"][:websites]
@@ -90,16 +96,16 @@ if st.session_state.responses:
         for article in st.session_state.articles:
             st.markdown(article)
         
-        st.session_state.custom_prompt = st.radio("Do you want to give a custom prompt for the final article?", ("Yes", "No"))
+        st.session_state.custom_prompt = st.radio("Do you want to give a custom prompt for the final article?", ("No", "Yes"))
         if st.session_state.custom_prompt == "Yes":
             prompt = st.text_area("Enter the prompt for the final article", key='custom_prompt')
             st.session_state.prompt = prompt if prompt else ""
         if st.session_state.custom_prompt == "No":
-            st.session_state.prompt = content_create.prompt
+            st.session_state.prompt = st.session_state.prompt + "Additional Instructions:: " + st.session_state.base_prompt
 
     if 'prompt' in st.session_state:
         if st.button("Generate Final Article", key="generate_final"):
-            content_create = ContentCreate(topic)
+            content_create = ContentCreate(topic, api_key)
             final_article = content_create.make_final_article(" ".join(st.session_state.articles), st.session_state.prompt)
             st.session_state.final_article = final_article
             st.write("Final article generated based on the selected articles")
