@@ -99,9 +99,9 @@ if st.session_state.responses:
         st.session_state.custom_prompt = st.radio("Do you want to give a custom prompt for the final article?", ("No", "Yes"))
         if st.session_state.custom_prompt == "Yes":
             prompt = st.text_area("Enter the prompt for the final article", key='custom_prompt')
-            st.session_state.prompt = prompt if prompt else ""
+            st.session_state.prompt = st.session_state.base_prompt + "Additional Instructions:: " + prompt if prompt else ""
         if st.session_state.custom_prompt == "No":
-            st.session_state.prompt = st.session_state.prompt + "Additional Instructions:: " + st.session_state.base_prompt
+            st.session_state.prompt =  st.session_state.base_prompt
 
     if 'prompt' in st.session_state:
         if st.button("Generate Final Article", key="generate_final"):
