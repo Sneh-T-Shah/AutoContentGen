@@ -1,6 +1,6 @@
 # AutoContentGen
 This app is deployed on Streamlit::
-- [AutoContentGen](https://deep-fake-detection-m.streamlit.app/](https://autocontentgen.streamlit.app/)
+- [AutoContentGen](https://autocontentgen.streamlit.app/)
 
 ## Description
 AutoContentGen is an automatic content generator built with Python and Streamlit. It allows users to quickly generate summaries and new content based on a specified topic. Users can scrape a set number of Google search result pages, summarize the content using the Gemini language model, and generate custom articles with citations.
