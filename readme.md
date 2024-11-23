@@ -16,7 +16,7 @@ Follow these steps to install and run AutoContentGen on your local machine:
 
 1. **Clone the repository:**
    ```bash
-   git clone https://github.com/Sneh-T-Shah/autocontentgen.git
+   git clone https://github.com/Sneh-T-Shah/AutoContentGen.git
    ```
 
 2. **Navigate to the project directory:**
